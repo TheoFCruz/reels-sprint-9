@@ -1,10 +1,11 @@
 #ifndef MORSE
 #define MORSE
 
-#include <map>
-#include <string>
+#include <Arduino.h>
 
-const std::map<std::string, char> morse_to_ascii = 
+#include <map>
+
+const std::map<String, char> morse_to_ascii = 
   {
     {".-", 'A'},
     {"-...", 'B'},

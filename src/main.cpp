@@ -3,19 +3,21 @@
 #include "morse_map.hpp"
 
 // O pino que le o fotorresistor
-#define LED_INPUT 0
+#define LED_INPUT 35
 
 // Os pinos do display
 #define TFT_DC 0
 #define TFT_CS 0
 
-// Durações do ponto e do espaço 
-#define DOT_DUR 0
-#define SPACE_DUR 0
+// Durações mínimas do traço e do espaço 
+#define DASH_DUR 240
+#define SPACE_DUR 560
 
 
 void setup()
 {
+  Serial.begin(115200);
+
   pinMode(LED_INPUT, INPUT); 
 }
 
@@ -35,17 +37,22 @@ void loop()
       while(digitalRead(LED_INPUT) == 1);
       uint32_t end_1 = millis();
       
-      if (end_1 - start_1 < DOT_DUR) morse_letter += '.';
+      if (end_1 - start_1 < DASH_DUR) morse_letter += '.';
       else morse_letter += '-';
 
       uint32_t start_0 = millis();
-      while(digitalRead(LED_INPUT) == 0);
+      while(digitalRead(LED_INPUT) == 0 && millis() - start_0 < SPACE_DUR);
       uint32_t end_0 = millis();
 
-      if (end_0 - start_0 > SPACE_DUR) break;
+      if (end_0 - start_0 >= SPACE_DUR) break;
       else continue;
     }
 
-    // Lógica de colocar letra no display
+    std::map<String, char>::iterator iter = morse_to_ascii.find(morse_letter);
+    if (iter != morse_to_ascii.end())
+    {
+      Serial.println(iter->second);
+      // Lógica de colocar letra no display
+    }
   }
 }
