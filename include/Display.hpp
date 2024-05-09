@@ -18,7 +18,7 @@ public:
   void reset_display();
 
 private:
-	Adafruit_ILI9341 _tft = Adafruit_ILI9341(5, 32);
+	Adafruit_ILI9341 _tft;
 };
 
 #endif //DISPLAY_HPP
