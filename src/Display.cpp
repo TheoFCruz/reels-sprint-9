@@ -1,6 +1,8 @@
 #include "Display.hpp"
 
-Display::Display(int tft_CS, int tft_DC) {
+Display::Display(int tft_CS, int tft_DC):
+  _tft(tft_CS, tft_DC)
+{
   _tft.begin();
   _tft.setTextColor(ILI9341_WHITE);
   _tft.setTextSize(2);
@@ -26,3 +28,4 @@ void Display::reset_display() {
   _tft.fillRect(0, 80, 400, 300, ILI9341_BLACK);
   this->main_screen();
 }
+

@@ -15,7 +15,7 @@
 #define DASH_DUR 240
 #define SPACE_DUR 560
 
-Display *tft;
+Display display(TFT_CS, TFT_DC);
 
 void setup()
 {
@@ -24,11 +24,8 @@ void setup()
   pinMode(LED_INPUT, INPUT);
   pinMode(reset, INPUT_PULLUP);
 
-  //Construção de um instância da classe Display
-  tft = new Display(TFT_CS, TFT_DC);
-
   //Constrói a tela principal do Display
-  tft->main_screen();
+  display.main_screen();
 }
 
 void loop()
@@ -62,9 +59,10 @@ void loop()
     if (iter != morse_to_ascii.end())
     {
       Serial.println(iter->second);
-      tft->write_character(iter->second);
+      display.write_character(iter->second);
     }
   }
   
-  if (!digitalRead(reset)) tft->reset_display();
+  if (!digitalRead(reset)) display.reset_display();
 }
+
