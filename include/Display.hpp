@@ -1,7 +1,8 @@
 #ifndef DISPLAY_HPP
 #define DISPLAY_HPP
 
-#include <Adafruit_ILI9341.h>
+#include "TFT_ILI9163C.h"
+#include "Adafruit_GFX.h"
 
 class Display{
 public:
@@ -18,7 +19,7 @@ public:
   void reset_display();
 
 private:
-	Adafruit_ILI9341 _tft;
+	TFT_ILI9163C _tft;
 };
 
 #endif //DISPLAY_HPP

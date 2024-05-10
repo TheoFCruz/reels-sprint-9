@@ -4,12 +4,15 @@
 #include "Display.hpp"
 
 // O pino que le o fotorresistor
-#define LED_INPUT 35
+#define LED_INPUT 33
+
+// O limite do sinal analógico que define se o led esta aceso ou apagado
+#define LED_THRESHOLD 3000
 
 // Os pinos do display e do botão de reset
-#define TFT_DC 32
+#define TFT_DC 21
 #define TFT_CS 5
-#define reset 2
+#define RESET 2
 
 // Durações mínimas do traço e do espaço
 #define DASH_DUR 240
@@ -17,12 +20,17 @@
 
 Display display(TFT_CS, TFT_DC);
 
+bool read_led(int pin)
+{
+  return analogRead(pin) > LED_THRESHOLD;
+}
+
 void setup()
 {
   Serial.begin(115200);
 
   pinMode(LED_INPUT, INPUT);
-  pinMode(reset, INPUT_PULLUP);
+  pinMode(RESET, INPUT);
 
   //Constrói a tela principal do Display
   display.main_screen();
@@ -35,20 +43,20 @@ void loop()
   // enquanto o tempo que o input fica em 0 for menor que a duração do espaço e, então, essa string
   // é associada a um caractere por meio do mapa de morse_map.hpp e esse caractere é colocado no display.
 
-  if (digitalRead(LED_INPUT) == 1)
+  if (read_led(LED_INPUT))
   {
     String morse_letter = "";
     while (1)
     {
       uint32_t start_1 = millis();
-      while (digitalRead(LED_INPUT) == 1);
+      while (read_led(LED_INPUT));
       uint32_t end_1 = millis();
 
       if (end_1 - start_1 < DASH_DUR) morse_letter += '.';
       else morse_letter += '-';
 
       uint32_t start_0 = millis();
-      while (digitalRead(LED_INPUT) == 0 && millis() - start_0 < SPACE_DUR);
+      while (!read_led(LED_INPUT) && millis() - start_0 < SPACE_DUR);
       uint32_t end_0 = millis();
 
       if (end_0 - start_0 >= SPACE_DUR) break;
@@ -63,6 +71,6 @@ void loop()
     }
   }
   
-  if (!digitalRead(reset)) display.reset_display();
+  if (digitalRead(RESET)) display.reset_display();
 }
 
