@@ -2,7 +2,6 @@
 #define DISPLAY_HPP
 
 #include "TFT_ILI9163C.h"
-#include "Adafruit_GFX.h"
 
 class Display{
 public:
